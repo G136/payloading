@@ -7,8 +7,10 @@
 	; us above, stack below
 	mov ax, LOAD_ADDRESS / 0x10
 	mov ds, ax
+
+	xor ax, ax
 	mov ss, ax
-	mov sp, 0
+	mov sp, LOAD_ADDRESS
 	mov bp, sp
 
 
@@ -17,6 +19,7 @@
 	mov dh, 0                             ; H,  floppy: [0, 1]
 	mov cl, 2 ; don't (re-)read ourselves ; S,  floppy: [1, 18]
 
+        ;; vvv not sure this will round up haha Ns better be multiples of 16
 	mov di, (LOAD_ADDRESS + 0x200) / 0x10 ; reading destination
 	mov si, N / 0x200                     ; remaining unread sectors
 

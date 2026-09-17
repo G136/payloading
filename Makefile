@@ -1,4 +1,4 @@
-N = $$(( 0x30000 ))
+N = $$(( 0x67000 ))
 
 all: clean build test
 
@@ -15,7 +15,7 @@ build: clean
 	dd if=payload     of=boot.img conv=notrunc seek=1
 
 test: build
-	qemu-system-i386 -cpu pentium2 -m 1g -fda boot.img -monitor stdio -device VGA
+	qemu-system-i386 -cpu pentium2 -m 1g -fda boot.img -device VGA
 
 debug: build
 	qemu-system-i386 -cpu pentium2 -m 1g -fda boot.img -monitor stdio -device VGA -s -S &
