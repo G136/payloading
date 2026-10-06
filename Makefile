@@ -1,4 +1,4 @@
-N = $$(( 0x67000 ))
+N = $$(( 0x67001 ))
 
 all: clean build test
 

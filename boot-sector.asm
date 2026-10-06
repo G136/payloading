@@ -1,4 +1,4 @@
-%define LOAD_ADDRESS 0x7C00
+%define LOAD_ADDRESS 0x7C00     ; this being a multiple of 0x10 is assumed
 ;;%define N            0x10000
 ;;^^^^^^^^^ is there a convention to declare im excpecting this from the outside
 
@@ -12,7 +12,7 @@
 	xor ax, ax
 	mov ss, ax
 	mov sp, LOAD_ADDRESS
-	mov bp, sp
+	;mov bp, sp
 
 
 	; reading FLOPPY sectors, bios gave us DL (drive number)
@@ -20,9 +20,8 @@
 	mov dh, 0                             ; H,  floppy: [0, 1]
 	mov cl, 2 ; don't (re-)read ourselves ; S,  floppy: [1, 18]
 
-        ;; not sure this will round up vvv haha Ns better be multiples of 16
 	mov di, (LOAD_ADDRESS + 0x200) / 0x10 ; reading destination
-	mov si, N / 0x200                     ; remaining unread sectors
+	mov si, (N + 0x1ff) / 0x200           ; remaining unread sectors
 
 read_sector:
 	; reading one sector at a time by moving the extra segment (no offset)
@@ -36,7 +35,7 @@ read_sector:
 	jc party
 
 
-        ; iterate
+	; iterate
 	add di, 0x200 / 0x10
 	dec si
 	cmp si, 0
@@ -47,13 +46,13 @@ read_sector:
 	cmp cl, 18
 	jna read_sector
 
-        ; carry S
+	; carry S
 	mov cl, 1
 	inc dh
 	cmp dh, 1
 	jna read_sector
 
-        ; carry H
+	; carry H
 	mov dh, 0
 	inc ch
 	cmp ch, 79
